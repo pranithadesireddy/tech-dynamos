@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MarketMind - AI Sales & Marketing Platform</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: #ffffff;
+    width: 550px;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 10px 25px rgba(0,0,0,0.2);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+label {
+    font-weight: bold;
+}
+
+select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+textarea {
+    height: 100px;
+    resize: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #4e73df;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #2e59d9;
+}
+
+#output {
+    margin-top: 20px;
+    background: #f8f9fc;
+    padding: 15px;
+    border-radius: 6px;
+    min-height: 120px;
+    white-space: pre-wrap;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>🚀 MarketMind AI</h1>
+
+    <label>Select Service:</label>
+    <select id="task">
+        <option value="campaign">Campaign Generation</option>
+        <option value="pitch">Sales Pitch Creation</option>
+        <option value="lead">Lead Scoring</option>
+        <option value="analysis">Market Analysis</option>
+    </select>
+
+    <label>Enter Product / Business Details:</label>
+    <textarea id="inputText" placeholder="Example: AI-powered fitness app for students"></textarea>
+
+    <button onclick="generateData()">Generate Insights</button>
+
+    <div id="output">Results will appear here...</div>
+</div>
+
+<script>
+async function generateData() {
+
+    const task = document.getElementById("task").value;
+    const inputText = document.getElementById("inputText").value;
+
+    if (!inputText) {
+        alert("Please enter product details.");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://127.0.0.1:8000/generate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                task: task,
+                text: inputText
+            })
+        });
+
+        const data = await response.json();
+        document.getElementById("output").innerText = data.output;
+
+    } catch (error) {
+        document.getElementById("output").innerText =
+            "Backend not connected. Please start FastAPI server.";
+    }
+}
+</script>
+
+</body>
+</html>
